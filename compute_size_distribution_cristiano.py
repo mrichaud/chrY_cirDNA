@@ -179,7 +179,7 @@ def plot_all_individuals(files, chrom_label, output_name, cond_pretty):
 def select_files(annot, cancer_label, pattern):
     annot["Sexe"] = annot["Sexe"].astype(str).str.strip()
     annot["Cancer"] = annot["Cancer"].astype(str).str.strip()
-    filtered = annot[(annot["Sexe"] == "F") & (annot["Cancer"] == cancer_label)]
+    filtered = annot[(annot["Sexe"] == "M") & (annot["Cancer"] == cancer_label)]
     valid_ids = set(filtered["ID_FinaleDB"].dropna().astype(str).str.strip())
 
     all_files = sorted(glob.glob(pattern))
@@ -362,7 +362,7 @@ if __name__ == "__main__":
     batch_size = 20
     MIN_READS_THRESHOLD = 100  # Excludes near-empty chrY profiles from pulling down the cohort mean
 
-    autosomes = [f"{i}" for i in [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,"X"]]
+    autosomes = [f"{i}" for i in ["Y"]]
     chromosomes = autosomes 
 
     for cond_key, cfg in conditions.items():
@@ -389,8 +389,8 @@ if __name__ == "__main__":
 
         # Step 2: Plotting for each chromosome
         for chrom in chromosomes:
-            files_focal = sorted(glob.glob(os.path.join(cond_out, f"*_chr{chrom}_female_size.tsv")))
-            files_others = sorted(glob.glob(os.path.join(cond_out, f"*_chr{chrom}_others_female_size.tsv")))
+            files_focal = sorted(glob.glob(os.path.join(cond_out, f"*_chr{chrom}_size.tsv")))
+            files_others = sorted(glob.glob(os.path.join(cond_out, f"*_chr{chrom}_others_size.tsv")))
 
             # Load only valid, non-zero arrays
             arrays_focal = [load_profile(f) for f in files_focal if load_profile(f).sum() > 0]
